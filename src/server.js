@@ -1,23 +1,30 @@
 import http from 'node:http'
-import { Database } from './database.js'
+import { json } from './middlewares/json.js'
 
 import { routes } from './routes.js'
+import { extractQueryParams } from './utils/extract-query-params.js'
 
-const database = new Database()
+const server = http.createServer(async (req, res) => {
+  const { method, url } = req
 
-export const routes = [
-  {
-    method: 'GET',
-    path: buildRoutePath('/users'),
-    handler: (req, res) => {
-      const { search } = req.query
+  await json(req, res)
 
-      const users = database.select('users', {
-        name: search,
-        email: search
-      })
+  const route = routes.find(route => {
+    return route.method === method && route.path.test(url)
+  })
 
-      return res.end(JSON.stringify(users))
-    }
-  },
-]
+  if (route) {
+    const routeParams = req.url.match(route.path)
+
+    const { query, ...params } = routeParams.groups
+
+    req.params = params
+    req.query = query ? extractQueryParams(query) : {}
+
+    return route.handler(req, res)
+  }
+
+  return res.writeHead(404).end()
+})
+
+server.listen(3333)
