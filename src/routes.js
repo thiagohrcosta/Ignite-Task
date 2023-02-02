@@ -49,22 +49,28 @@ export const routes = [
     }
   },
   {
-    method: 'PATCH',
+    method: 'PUT',
     path: buildRoutePath('/tasks/:id'),
     
     handler: (req, res) => {
       const { id } = req.params
-      const { title, description } = req.body
-
+    
       const [task] = database.select('task', { id })
-      
+    
       if (!task) {
-        return res.writeHead(404).end(
-          JSON.stringify({ message: "task not found"})
-        )
+        return res.writeHead(404).end()
       }
 
-      return res.writeHead(200).end()
+      const { title, description } = req.body
+
+      database.update('task', id, {
+        title,
+        description,
+        updated_at: new Date()
+      })
+
+      return res.writeHead(204).end()
+
     }
   }
 ]
