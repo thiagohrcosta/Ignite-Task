@@ -13,5 +13,24 @@ export const routes = [
 
       res.end(JSON.stringify(tasks))
     }
+  },
+  {
+    method: 'POST',
+    path: buildRoutePath('/tasks'),
+    handler: (req, res) => {
+      const { title, description } = req.body
+
+      if (!title) {
+        return res.writeHead(400).end(
+          JSON.stringify({ message: "title is required"})
+        )
+      }
+
+      if (!description) {
+        return res.writeHead(400).end(
+          JSON.stringify({ message: "description is required"})
+        )
+      }
+    }
   }
 ]
