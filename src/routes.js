@@ -49,7 +49,7 @@ export const routes = [
     }
   },
   {
-    method: 'PUT',
+    method: 'PATCH',
     path: buildRoutePath('/tasks/:id'),
     
     handler: (req, res) => {
