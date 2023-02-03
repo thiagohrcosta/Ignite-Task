@@ -1,3 +1,4 @@
+import { Console } from 'node:console'
 import { randomUUID } from 'node:crypto'
 import { Database } from './database.js'
 import { buildRoutePath } from './utils/build-route-path.js'
@@ -49,7 +50,7 @@ export const routes = [
     }
   },
   {
-    method: 'PATCH',
+    method: 'PUT',
     path: buildRoutePath('/tasks/:id'),
     
     handler: (req, res) => {
@@ -70,7 +71,35 @@ export const routes = [
       })
 
       return res.writeHead(204).end()
+    },
+  },
+  {
+    method: 'PATCH',
+    path: buildRoutePath('/tasks/:id/complete'),
+    handler: (req, res) => {
+      const { id } = req.params
+      
+      const [task] = database.select('task', { id })
+      
+      if (!task) {
+        return res.writeHead(404).end()
+      }
 
+      if (task.completed_at) {
+        return res.writeHead(400).end(
+          JSON.stringify({ message: "task already completed"})
+        )
+      }
+
+      const completed_at = task.completed_at ? null : new Date()
+
+      database.update('task', id, {
+        completed_at: completed_at,
+        updated_at: new Date(),
+        ...task
+      })
+
+      return res.writeHead(204).end()
     }
   }
 ]
