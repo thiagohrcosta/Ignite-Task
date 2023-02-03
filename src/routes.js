@@ -10,7 +10,10 @@ export const routes = [
     method: 'GET',
     path: buildRoutePath('/tasks'),
     handler: (req, res) => {
+      // need to fix cors issue
+      res.setHeader('Access-Control-Allow-Origin', '*')
       const tasks = database.select('task')
+      
 
       return res.end(JSON.stringify(tasks))
     }
@@ -77,8 +80,10 @@ export const routes = [
     method: 'PATCH',
     path: buildRoutePath('/tasks/:id/complete'),
     handler: (req, res) => {
+      res.setHeader('Access-Control-Allow-Origin', '*')
+
       const { id } = req.params
-      
+
       const [task] = database.select('task', { id })
       
       if (!task) {
