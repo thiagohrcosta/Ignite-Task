@@ -91,13 +91,15 @@ export const routes = [
         )
       }
 
-      const completed_at = task.completed_at ? null : new Date()
+      const completed_at = new Date()
 
       database.update('task', id, {
-        completed_at: completed_at,
+        ...task,
+        completed_at: new Date(),
         updated_at: new Date(),
-        ...task
       })
+
+      console.log(task)
 
       return res.writeHead(204).end()
     }
