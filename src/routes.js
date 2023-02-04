@@ -12,6 +12,7 @@ export const routes = [
     handler: (req, res) => {
       // need to fix cors issue
       res.setHeader('Access-Control-Allow-Origin', '*')
+
       const tasks = database.select('task')
       
 
@@ -22,6 +23,10 @@ export const routes = [
     method: 'POST',
     path: buildRoutePath('/tasks'),
     handler: (req, res) => {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE'); 
+      res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); 
+
       const { title, description } = req.body
 
       if (!title) {
