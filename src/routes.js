@@ -86,7 +86,7 @@ export const routes = [
     method: 'PATCH',
     path: buildRoutePath('/tasks/:id/complete'),
     handler: (req, res) => {
-      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001')
+      res.setHeader('Access-Control-Allow-Origin', '*')
       
       const { id } = req.params
       
