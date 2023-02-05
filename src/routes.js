@@ -86,10 +86,10 @@ export const routes = [
     method: 'PATCH',
     path: buildRoutePath('/tasks/:id/complete'),
     handler: (req, res) => {
-      res.setHeader('Access-Control-Allow-Origin', '*')
-
+      res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3001')
+      
       const { id } = req.params
-
+      
       const [task] = database.select('task', { id })
       
       if (!task) {
