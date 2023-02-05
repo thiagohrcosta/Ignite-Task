@@ -87,9 +87,9 @@ export const routes = [
     path: buildRoutePath('/tasks/:id/complete'),
     handler: (req, res) => {
       res.setHeader('Access-Control-Allow-Origin', '*')
-
+      
       const { id } = req.params
-
+      
       const [task] = database.select('task', { id })
       
       if (!task) {
